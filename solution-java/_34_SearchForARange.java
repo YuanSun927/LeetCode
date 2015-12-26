@@ -15,7 +15,7 @@ public class _34_SearchForARange {
         if (nums == null || nums.length == 0 || target < nums[0] || target > nums[nums.length - 1])
             return new int[] {-1, -1};
         int left = 0, right = nums.length - 1, mid = 0;
-        while (left < right) {
+        while (left <= right) {
             mid = left + ((right - left) >> 1);
             if (nums[mid] == target)
                 break;
@@ -27,21 +27,30 @@ public class _34_SearchForARange {
         if (nums[mid] != target)
             return new int[] {-1, -1};
         int left1 = left, right1 = mid, mid1 = 0;
-        while (left1 < right1) {
+        int leftIndex = left, rightIndex = right;
+        while (left1 <= right1) {
             mid1 = left1 + ((right1 - left1) >> 1);
-            if (nums[mid1] == target)
-                right1 = mid1 - 1;
-            else
+            if (nums[mid1] == target) {
+                if (mid1 == 0 || nums[mid1 - 1] < target) {
+                    leftIndex = mid1;
+                    break;
+                } else
+                    right1 = mid1 - 1;
+            } else 
                 left1 = mid1 + 1;
         }
         int left2 = mid, right2 = right, mid2 = 0;
-        while (left2 < right2) {
+        while (left2 <= right2) {
             mid2 = left2 + ((right2 - left2) >> 1);
-            if (nums[mid2] == target)
-                left2 = mid2 - 1;
-            else
-                right2 = mid2 + 1;
+            if (nums[mid2] == target) {
+                if (mid2 == nums.length - 1 || nums[mid2 + 1] > target) {
+                    rightIndex = mid2;
+                    break;
+                } else
+                    left2 = mid2 + 1;
+            } else
+                right2 = mid2 - 1;
         }
-        return new int[] {left1, left2};
+        return new int[] {leftIndex, rightIndex};
     }
 }

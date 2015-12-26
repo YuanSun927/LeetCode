@@ -7,17 +7,16 @@ return 4->5->1->2->3->NULL.
 */
 public class _61_RotateList {
 
-    public ListNode rotateRight(ListNode head, int k) {
-        if (k == 0 || head == null || head.next == null)
-            return head;
+    public ListNode rotateRight(ListNode head, int k) { 
         ListNode fast = head, slow = head;
         int len = 1;
-        while (fast.next != null){
-            fast = fast.next;
+        while (fast != null && fast.next != null) {
             len++;
+            fast = fast.next;
         }
-        k = k % len;
-        for (int i = 0; i < len - k; i++) {
+        if (len == 1 || k == 0 || (k %= len) == 0)
+            return head;
+        for (int i = 0; i < len - k - 1; i++) {
             slow = slow.next;
         }
         ListNode newHead = slow.next;
