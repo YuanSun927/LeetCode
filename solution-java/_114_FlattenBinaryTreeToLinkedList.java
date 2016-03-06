@@ -1,15 +1,19 @@
 public class _114_FlattenBinaryTreeToLinkedList {
     
     public void flatten(TreeNode root) {
-        
+        if (root == null)
+            return;
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        flatten(left);
+        flatten(right);
+        if (left == null)
+            return;
+        root.right = left;
+        root.left = null;
+        while (left.right != null)
+            left = left.right;
+        left.right = right;
     }
 
-    private TreeNode traverse(TreeNode root) {
-        if (root.left == null && right.right == null)
-            return root;
-        if (root.left != null)
-            return traverse(root.left);
-        if (root.right != null)
-            return traverse(root.right);
-    }
 }
