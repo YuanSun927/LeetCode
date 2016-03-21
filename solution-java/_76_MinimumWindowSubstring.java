@@ -14,42 +14,41 @@ If there are multiple such windows, you are guaranteed that there will always be
 public class _76_MinimumWindowSubstring {
 
     public String minWindow(String s, String t) {
-        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
-        for (int i = 0; i < t.length(); i++) {
-            map.put(t.charAt(i), 0);
-        }
-        int head = 0;
-        while (head < s.length() && !map.containsKey(s.charAt(head)))
-            head++;
-        if (head >= s.length())
+        if (s == null || s.length() < t.length() || s.length() == 0)
             return "";
-        int found = 0;
-        int minSize = Integer.MAX_VALUE;
-        String minWinStr = "";
-        for (int i = head; i < s.length(); i++) {
-            char cur = s.charAt(i);
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        for (int i = 0; i < t.length(); i++) {
+            Integer n = map.get(t.charAt(i));
+            if (n == null)
+                n = 0;
+            map.put(t.charAt(i), n + 1);
+        }
+        int start = 0, end = 0;
+        int count = t.length();
+        int minStart = 0, minLen = s.length() + 1;
+        while (end < s.length()) {
+            char cur = s.charAt(end++);
             if (map.containsKey(cur)) {
-                int k = map.get(cur);
-                found += map.get(cur) == 0 ? 1 : 0;
-                map.put(cur, k + 1);
+                int n = map.get(cur);
+                if (n > 0)
+                    count--;
+                map.put(cur, n - 1);
             }
-            if (found == map.size()) {
-                while (head < i) {
-                    if (!map.containsKey(s.charAt(head))) {
-                        head++;
-                    } else if (map.get(s.charAt(head)) > 1) {
-                        map.put(s.charAt(head), map.get(s.charAt(head)) - 1);
-                        head++;
-                    } else {
-                        break;
-                    }
+            while (start < s.length() && count == 0) {
+                int len = end - start;
+                if (len < minLen) {
+                    minLen = len;
+                    minStart = start;
                 }
-                if (i - head + 1 < minSize) {
-                    minSize = i - head + 1;
-                    minWinStr = s.substring(head, i + 1);
+                char startChar = s.charAt(start++);
+                if (map.containsKey(startChar)) {
+                    int n = map.get(startChar);
+                    if (n == 0)
+                        count++;
+                    map.put(startChar, n + 1);
                 }
             }
         }
-        return minWinStr;
+        return minLen > s.length() ? "" : s.substring(minStart, minStart + minLen);
     }
 }

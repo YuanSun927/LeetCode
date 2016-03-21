@@ -54,4 +54,29 @@ public class _94_BinaryTreeInorderTraversal {
         }
         return list;
     }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left == null) { // 当前节点无左子树
+                list.add(cur.val);  // 访问该节点
+                cur = cur.right;    // 沿线索返回
+            } else {
+                TreeNode prev = cur.left;
+                while (prev.right != null && prev.right != cur) {
+                    prev = prev.right;
+                }
+                if (prev.right == null) {
+                    prev.right = cur; // 建立线索
+                    cur = cur.left;
+                } else { // prev.right == cur 当前节点的左子树访问完毕
+                    list.add(cur.val);
+                    cur = cur.right;
+                    prev.right = null;
+                }
+            }
+        }
+        return list;
+    }
 }

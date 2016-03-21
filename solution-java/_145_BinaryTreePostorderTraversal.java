@@ -36,4 +36,53 @@ public class _145_BinaryTreePostorderTraversal {
         }
         return result;
     }
+
+    // Morris traverse
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new LinkedList<>();
+        if (root == null)
+            return result;
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left == null) {
+                cur = cur.right;
+            } else {
+                TreeNode prev = cur.left;
+                while (prev.right != null && prev.right != cur) {
+                    prev = prev.right;
+                }
+                if (prev.right == null) {
+                    prev.right = cur;
+                    cur = cur.left;
+                } else {
+                    prev.right = null;
+                    traverseRightEdge(cur.left, result);
+                    cur = cur.right;
+                }
+            }
+        }
+        traverseRightEdge(root, result);
+        return result;
+    }
+
+    private void traverseRightEdge(TreeNode node, List<Integer> result) {
+        TreeNode tail = reverse(node);
+        TreeNode cur = tail;
+        while (cur != null) {
+            result.add(cur.val);
+            cur = cur.right;
+        }
+        reverse(tail);
+    }
+
+    private TreeNode reverse(TreeNode node) {
+        TreeNode head = null;
+        while (node != null) {
+            TreeNode temp = node;
+            node = node.right;
+            temp.right = head;
+            head = temp;
+        }
+        return head;
+    }
 }

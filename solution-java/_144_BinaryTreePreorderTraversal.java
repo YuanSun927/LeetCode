@@ -28,4 +28,30 @@ public class _144_BinaryTreePreorderTraversal {
         }
         return list;
     }
+
+    // Morris traverse
+    public List<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        TreeNode cur = root;
+        while (cur != null) {
+            if (cur.left == null) {
+                list.add(cur.val);
+                cur = cur.right;
+            } else {
+                TreeNode prev = cur.left;
+                while (prev.right != null && prev.right != cur) {
+                    prev = prev.right;
+                }
+                if (prev.right == null) {
+                    prev.right = cur;
+                    list.add(cur.val);
+                    cur = cur.left;
+                } else {
+                    cur = cur.right;
+                    prev.right = null;
+                }
+            }
+        }
+        return list;
+    }
 }

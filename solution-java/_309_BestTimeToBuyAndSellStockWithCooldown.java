@@ -14,26 +14,6 @@ transactions = [buy, sell, cooldown, buy, sell]
 public class _309_BestTimeToBuyAndSellStockWithCooldown {
 
     public int maxProfit(int[] prices) {
-        if (prices == null || prices.length == 0)
-            return 0;
-        int profit = 0;;
-        int lastProfit = 0;
-        boolean isLastPeak = false;
-        for (int i = 1; i < prices.length; i++) {
-            if (prices[i] >= prices[i - 1]) {
-                lastProfit = prices[i] - prices[i - 1];
-                profit += lastProfit;
-                isLastPeak = true;
-            } else if (i < prices.length - 1 && isLastPeak && prices[i] < prices[i - 1] && prices[i] > prices[i + 1]) {
-                int p = prices[i + 1] - prices[i];
-                if (p > lastProfit) {
-                    profit = profit - lastProfit + p;
-                    i++;
-                }
-            } else {
-                isLastPeak = false;
-            }
-        }
-        return profit;
+
     }
 }
