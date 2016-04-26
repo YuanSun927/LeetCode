@@ -74,15 +74,15 @@ public class _5_LongestPalindromicSubstring {
         str[str.length - 1] = '#';
         int prMax = 0;
         int pos = 0;
-        int[] len = new int[str.length()];
+        int[] len = new int[str.length];
         int lengthMax = 0, maxPos = 0;
-        for (int i = 0; i < str.length(); i++) {
+        for (int i = 0; i < str.length; i++) {
             if (i < prMax) {
                 len[i] = Math.min(len[2 * pos - i], prMax - i);
             } else {
                 len[i] = 1;
             }
-            while (i - len[i] >= 0 && i + len[i] < str.length() && str.charAt(i + len[i]) == str.charAt(i - len[i]))
+            while (i - len[i] >= 0 && i + len[i] < str.length && str[i + len[i]] == str[i - len[i]])
                 len[i]++;
             if (len[i] + i> prMax) {
                 prMax = len[i] + i;
@@ -98,7 +98,7 @@ public class _5_LongestPalindromicSubstring {
         int end = start + 2 * lengthMax - 2;
         for (int i = start; i <= end; i++) {
             if (i % 2 == 1) {
-                p.append(str.charAt(i));
+                p.append(str[i]));
             }
         }
         return p.toString();

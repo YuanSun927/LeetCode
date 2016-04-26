@@ -34,24 +34,21 @@ public class _146_LRUCache {
     }
 
     public int get(int key) {
-        if (!cache.containsKey(key))
+        Node node = cache.get(key);
+        if (node == null)
             return -1;
 
-        Node node = cache.get(key);
-
-        // remove node
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
-
         // move node to the tail
-        removeToTail(node);
-
+        moveToTail(node);
         return node.value;
     }
 
     public void set(int key, int value) {
-        if (get(key) != -1) {
-            cache.get(key).value = value;
+        Node node = cache.get(key);
+        if (node != null) {
+            node.value = value;
+            // move the updated node to the tail
+            moveToTail(node);
             return;
         }
 
@@ -63,14 +60,54 @@ public class _146_LRUCache {
         Node insert = new Node(key, value);
         cache.put(key, insert);
 
-        // move the new node to the tail
-        removeToTail(insert);
+        // add the new node to the tail
+        addToTail(insert);
     }
 
-    private void removeToTail(Node node) {
+    private void moveToTail(Node node) {
+        // remove node
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+        // add to tail
         node.prev = tail.prev;
         node.next = tail;
         node.prev.next = node;
         tail.prev = node;
+    }
+
+    private void addToTail(Node node) {
+        node.prev = tail.prev;
+        node.next = tail;
+        node.prev.next = node;
+        tail.prev = node;
+    }
+
+    // Method 2
+    // Used LinkedHashMap
+    // Remember to import java.util.LinkedHashMap 
+    private Map<Integer, Integer> lruCache;
+    private int capacity;
+
+    public LRUCache(int capacity) {
+        lruCache = new LinkedHashMap<Integer, Integer>(0, 0.75f, true);
+        this.capacity = capacity;
+    }
+
+    public int get(int key) {
+        if (!lruCache.containsKey(key))
+            return -1;
+        return lruCache.get(key);
+    }
+
+    public void set(int key, int value) {
+        lruCache.put(key, value);
+        if (lruCache.size() > capacity) {
+            Map.Entry<Integer, Integer> toEvict = null;
+            for (Map.Entry<Integer, Integer> entry : lruCache.entrySet()) {
+                toEvict = entry;
+                break;
+            }
+            lruCache.remove(toEvict.getKey());
+        }
     }
 }

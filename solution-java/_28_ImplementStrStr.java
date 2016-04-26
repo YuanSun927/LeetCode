@@ -45,7 +45,8 @@ public class _28_ImplementStrStr {
         if (needle.length() == 0)
             return 0;
         int[] next = getNextArray(needle);
-        int hPos = 0, nPos = 0;
+        int hPos = 0; // The beginning of the current match in haystack
+        int nPos = 0; // The position of the current character in needle
         while (hPos + nPos < haystack.length()) {
             if (needle.charAt(nPos) == haystack.charAt(hPos + nPos)) {
                 if (nPos == needle.length() - 1)
@@ -75,7 +76,10 @@ public class _28_ImplementStrStr {
         int pos = 2;
         while (pos < t.length()) {
             if (t.charAt(pos - 1) == t.charAt(cn)) {
-                next[pos++] = ++cn;
+                if (t.charAt(pos) != t.charAt(++cn))
+                    next[pos++] = cn;
+                else
+                    next[pos++] = next[cn];
             } else if (cn > 0) {
                 cn = next[cn];
             } else {
